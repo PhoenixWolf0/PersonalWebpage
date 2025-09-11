@@ -1,38 +1,84 @@
-.App {
-  text-align: center;
+:root {
+  /* Terminal text */
+  --Font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --FontSize: clamp(12px, 2.6vmin, 18px);
+  --BloomSize: clamp(6px, 1.3vmin, 9px);
+  --ThemeColor: #ffd37a;
+  --ThemeBloom: rgba(255, 200, 120, 0.85);
+  --ThemeBackground: #7f5d1d;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html[data-crt-theme='green'] {
+  --ThemeColor: #7cff8b;
+  --ThemeBloom: rgba(124, 255, 139, 0.85);
+  --ThemeBackground: #1b5e20;
+}
+html[data-crt-theme='blue'] {
+  --ThemeColor: #7ad7ff;
+  --ThemeBloom: rgba(122, 215, 255, 0.85);
+  --ThemeBackground: #0a3d62;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.CRT-Background {
+  position: fixed; inset: 0;
   min-height: 100vh;
   display: flex;
+  overflow: hidden;
+
+  background: black;
+
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+
+.TerminalContent {
+  position: relative;
+  width: 100%;
+
+  filter: contrast(1.05) saturate(1.1) blur(.25px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.TerminalText {
+  margin: 2%;
+
+  font-family: var(--Font), serif;
+  font-size: var(--FontSize);
+  color: var(--ThemeColor);
+  text-shadow:
+          0 0 1vmin var(--ThemeColor), /* Giving slight bloom */
+          2vmin 0 15px var(--ThemeColor),
+          -2vmin 0 15px var(--ThemeColor);
+}
+
+.BackGroundEffect {
+  background: radial-gradient(circle at center, var(--ThemeColor), black);
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+}
+
+.NoiseEffect {
+  position: absolute;
+  inset: -110%;
+
+  mix-blend-mode: overlay;
+
+  pointer-events: none;
+  opacity: 1;
+  background-image: url('data:image/svg+xml;utf8,\
+  <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 700 700">\
+    <filter id="n">\
+      <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="3"/>\
+      <feColorMatrix type="saturate" values="0"/>\
+    </filter>\
+    <rect width="100%" height="100%" filter="url(%23n)"/>\
+  </svg>');
+  animation: Shake 0.2s linear infinite both;
+}
+@keyframes Shake {
+  0% { transform: translateX(10%) translateY(10%); }
+  100% { transform: translateX(-10%) translateY(-10%); }
 }
