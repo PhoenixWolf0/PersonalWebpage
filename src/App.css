@@ -1,66 +1,36 @@
 :root {
   /* Terminal text */
-  --Font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --FontSize: clamp(12px, 2.6vmin, 18px);
-  --BloomSize: clamp(6px, 1.3vmin, 9px);
+  --BloomSize: 30px;
+
   --ThemeColor: #ffd37a;
+  --SecondaryThemeColor: #8e4617;
   --ThemeBloom: rgba(255, 200, 120, 0.85);
   --ThemeBackground: #7f5d1d;
 }
 
-html[data-crt-theme='green'] {
+html[DataTheme='green'] {
   --ThemeColor: #7cff8b;
   --ThemeBloom: rgba(124, 255, 139, 0.85);
   --ThemeBackground: #1b5e20;
 }
-html[data-crt-theme='blue'] {
+html[DataTheme='blue'] {
   --ThemeColor: #7ad7ff;
   --ThemeBloom: rgba(122, 215, 255, 0.85);
   --ThemeBackground: #0a3d62;
 }
 
-.CRT-Background {
+.Background {
   position: fixed; inset: 0;
-  min-height: 100vh;
-  display: flex;
   overflow: hidden;
-
   background: black;
 
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
 }
 
-
-
-.TerminalContent {
-  position: relative;
-  width: 100%;
-
-  filter: contrast(1.05) saturate(1.1) blur(.25px);
-}
-
-.TerminalText {
-  margin: 2%;
-
-  font-family: var(--Font), serif;
-  font-size: var(--FontSize);
-  color: var(--ThemeColor);
-  text-shadow:
-          0 0 1vmin var(--ThemeColor), /* Giving slight bloom */
-          2vmin 0 15px var(--ThemeColor),
-          -2vmin 0 15px var(--ThemeColor);
-}
-
-.BackGroundEffect {
-  background: radial-gradient(circle at center, var(--ThemeColor), black);
-  opacity: 0.3;
-  mix-blend-mode: multiply;
-}
-
-.NoiseEffect {
+/* NoiseFilter */
+.Background::after {
+  content: "";
   position: absolute;
   inset: -110%;
 
@@ -82,3 +52,26 @@ html[data-crt-theme='blue'] {
   0% { transform: translateX(10%) translateY(10%); }
   100% { transform: translateX(-10%) translateY(-10%); }
 }
+
+
+.TerminalContent {
+  position: relative;
+  width: 100%;
+
+  color: var(--ThemeColor);
+  filter: contrast(1.05) saturate(1.1)
+}
+
+
+.TerminalText {
+  margin: 2%;
+
+  font-family: monospace;
+  font-size: var(--FontSize);
+  text-shadow:
+          0 0 1px var(--ThemeColor),
+          0 0 calc(var(--BloomSize) * 0.3) var(--ThemeBloom),
+          0 0 calc(var(--BloomSize) * 0.7) var(--ThemeBloom),
+          0 0 calc(var(--BloomSize) * 1.2) var(--ThemeBloom);
+}
+
